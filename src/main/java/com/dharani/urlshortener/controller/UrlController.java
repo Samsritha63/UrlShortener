@@ -4,14 +4,19 @@ import com.dharani.urlshortener.dto.UrlRequest;
 import com.dharani.urlshortener.dto.UrlResponse;
 import com.dharani.urlshortener.model.UrlMapping;
 import com.dharani.urlshortener.service.UrlService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UrlController {
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     private final UrlService urlService;
 
@@ -24,7 +29,7 @@ public class UrlController {
 
         String shortCode = urlService.shortenUrl(request.getOriginalUrl());
 
-        String shortUrl = "http://localhost:8080/" + shortCode;
+        String shortUrl = baseUrl + "/" + shortCode;
 
         return ResponseEntity.ok(new UrlResponse(shortUrl));
     }
